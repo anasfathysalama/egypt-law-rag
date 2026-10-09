@@ -46,6 +46,12 @@ data/processed/*
 !data/processed/*.dvc
 !data/processed/.gitignore
 
+# Vector index is a DVC output
+data/index/*
+!data/index/.gitkeep
+!data/index/*.dvc
+!data/index/.gitignore
+
 # Experiment tracking and data versioning
 mlruns/
 .dvc/cache/

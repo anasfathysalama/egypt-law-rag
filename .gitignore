@@ -61,3 +61,7 @@ reports/mlflow/*
 !reports/mlflow/.gitkeep
 .cache/
 .dvc/cache/
+data/ollama/
+data/prometheus/
+data/grafana/
+data/langfuse-db/

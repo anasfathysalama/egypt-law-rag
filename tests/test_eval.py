@@ -2,6 +2,7 @@ from egylaw_rag.config import Settings
 from egylaw_rag.corpus.store import read_articles
 from egylaw_rag.eval.metrics import (
     FAITHFULNESS_MINIMUM,
+    RETRIEVAL_K,
     EvalQuestion,
     first_relevant_rank,
     hit_at_k,
@@ -56,6 +57,7 @@ def test_retrieval_on_a_golden_set_needs_no_language_model() -> None:
 
 def test_faithfulness_gate_is_0_75() -> None:
     assert FAITHFULNESS_MINIMUM == 0.75
+    assert RETRIEVAL_K == 16
     assert passes_faithfulness(0.75)
     assert not passes_faithfulness(0.749)
 

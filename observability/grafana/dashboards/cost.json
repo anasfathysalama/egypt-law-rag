@@ -1,0 +1,19 @@
+{
+  "title": "Token cost",
+  "uid": "egylaw-cost",
+  "schemaVersion": 39,
+  "panels": [
+    {
+      "type": "stat",
+      "title": "USD per hour",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(egylaw_tokens_total[1h])) * 3600 / 1000 * 0.05"
+        }
+      ],
+      "description": "0.05 USD per 1,000 tokens. Documented stand-in for the Groq Qwen chat price, not a live invoice."
+    }
+  ]
+}

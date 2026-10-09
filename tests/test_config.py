@@ -15,6 +15,14 @@ def test_default_paths_stay_inside_the_project(monkeypatch) -> None:
     monkeypatch.delenv("QUESTIONS_FULL_PATH", raising=False)
     monkeypatch.delenv("MLFLOW_TRACKING_URI", raising=False)
     monkeypatch.delenv("MLFLOW_EXPERIMENT", raising=False)
+    monkeypatch.delenv("GENERATOR_BACKEND", raising=False)
+    monkeypatch.delenv("OLLAMA_MODEL", raising=False)
+    monkeypatch.delenv("OLLAMA_API_BASE", raising=False)
+    monkeypatch.delenv("ALERT_WEBHOOK_URL", raising=False)
+    monkeypatch.delenv("TOKEN_PRICE_PER_1K", raising=False)
+    monkeypatch.delenv("LANGFUSE_HOST", raising=False)
+    monkeypatch.delenv("LANGFUSE_PUBLIC_KEY", raising=False)
+    monkeypatch.delenv("LANGFUSE_SECRET_KEY", raising=False)
     settings = Settings(_env_file=None)
     assert settings.pdf == settings.project_root / "data" / "raw" / "law.pdf"
     assert settings.articles == settings.project_root / "data" / "processed" / "civil_code.json"
@@ -31,3 +39,7 @@ def test_default_paths_stay_inside_the_project(monkeypatch) -> None:
     assert settings.embedding_cache_dir == settings.project_root / ".cache" / "fastembed"
     assert settings.mlflow_tracking_uri == "http://127.0.0.1:5000"
     assert settings.mlflow_experiment == "civil-code-retrieval"
+    assert settings.generator_backend == "groq"
+    assert settings.ollama_model == "qwen2.5:0.5b"
+    assert settings.token_price_per_1k == 0.05
+    assert settings.alert_webhook_url == ""

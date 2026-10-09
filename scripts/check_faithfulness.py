@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import httpx
+
 from egylaw_rag.config import get_settings
 from egylaw_rag.corpus.store import read_articles
 from egylaw_rag.eval.metrics import (
@@ -13,9 +15,9 @@ from egylaw_rag.eval.metrics import (
     mean_reciprocal_rank,
     passes_faithfulness,
 )
+from egylaw_rag.eval.ragas import mean_scores, notify_low_faithfulness, score_example
 from egylaw_rag.index.embed import LocalEmbedder
 from egylaw_rag.index.store import VectorIndex
-from egylaw_rag.tracking import faithfulness_score
 
 
 def main() -> None:
@@ -31,24 +33,42 @@ def main() -> None:
         raise SystemExit(f"corpus is missing evaluation articles: {missing}")
     index = VectorIndex.load(settings.index)
     embedder = LocalEmbedder(settings.embedding_model)
-    scores: list[float] = []
+    rows = []
     ranks: list[int | None] = []
     for question in questions:
         article = articles[question.article_number]
         hits = index.search(embedder.embed_query(question.question_ar), k=RETRIEVAL_K)
-        scores.append(faithfulness_score(article.text_normalized, [hit.text for hit in hits]))
+        contexts = [hit.text for hit in hits]
         numbers = [hit.article_number for hit in hits]
+        rows.append(
+            score_example(
+                question.question_ar,
+                article.text_normalized,
+                contexts,
+                numbers,
+                article.article_number,
+                article.text_normalized,
+            )
+        )
         ranks.append(first_relevant_rank(numbers, question.article_number))
-    faithfulness = sum(scores) / len(scores)
+    scores = mean_scores(rows)
     print(
-        f"faithfulness={faithfulness:.3f} "
+        f"faithfulness={scores.faithfulness:.3f} "
+        f"answer_relevancy={scores.answer_relevancy:.3f} "
+        f"context_precision={scores.context_precision:.3f} "
+        f"context_recall={scores.context_recall:.3f} "
         f"hit@{RETRIEVAL_K}={hit_at_k(ranks, RETRIEVAL_K):.3f} "
         f"mrr={mean_reciprocal_rank(ranks):.3f}"
     )
-    if not passes_faithfulness(faithfulness):
+    notify_low_faithfulness(scores.faithfulness, settings.alert_webhook_url, _post_webhook)
+    if not passes_faithfulness(scores.faithfulness):
         raise SystemExit(
-            f"faithfulness {faithfulness:.3f} is under {FAITHFULNESS_MINIMUM:.2f}"
+            f"RAGAS faithfulness {scores.faithfulness:.3f} is under {FAITHFULNESS_MINIMUM:.2f}"
         )
+
+
+def _post_webhook(url: str, payload: dict[str, str]) -> None:
+    httpx.post(url, json=payload, timeout=10.0)
 
 
 if __name__ == "__main__":

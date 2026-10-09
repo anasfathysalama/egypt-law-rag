@@ -17,6 +17,20 @@ The processed articles and the vector index are in git, so a clone can serve `/a
 - **Load test.** `locustfile.py` sends 50 concurrent users at `POST /ask`. `scripts/stub_api.py` is a local API with no model call. The stub run is in `reports/locust_50.html`: 3,911 requests, 0 failures, average about 11 ms, p99 about 130 ms.
 - **CI.** GitHub Actions lints, tests, rebuilds the index, fails on low faithfulness, and builds the Docker image with that index inside it.
 
+## Models
+
+All of these run on CPU. The committed index was built with the primary embedding model. Changing `EMBEDDING_MODEL` means rebuilding `data/index`.
+
+| Role | Model | How it is selected |
+|---|---|---|
+| Embeddings (index and queries) | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` | `EMBEDDING_MODEL`. 384 dimensions, fastembed. |
+| Alternate embeddings | `minishlab/potion-multilingual-128M` | `EMBEDDING_MODEL_ALT`. Not the index that ships in git. |
+| Answers | Groq `qwen3.8-27b` | Default. `GENERATOR_BACKEND=groq` and `GROQ_MODEL`. Needs `GROQ_API_KEY`. |
+| Answers, local | Ollama `qwen2.5:0.5b` | `GENERATOR_BACKEND=ollama` and `OLLAMA_MODEL`. Pull it with `ollama pull qwen2.5:0.5b`. |
+| Optional generator | `gemini-3.8-flash` | `GEMINI_MODEL` and `GEMINI_API_KEY`. Implemented in code. `/ask` uses Groq or Ollama. |
+
+`/ask` retrieves the top 5 chunks and sends them to the answer model. The faithfulness check retrieves 16 chunks and does not call a language model. Token cost in Grafana uses 0.05 USD per 1,000 tokens as a stand-in price for the Groq model.
+
 ## Architecture
 
 ```mermaid
@@ -102,10 +116,14 @@ curl.exe -X POST http://127.0.0.1:8000/ask -H "Content-Type: application/json" -
 Health check:
 
 ```powershell
-Invoke-RestMethod http://127.0.0.1:8000/health
+curl.exe http://127.0.0.1:8000/health
 ```
 
-Stream the answer by sending `"stream": true`. The body comes back as plain text.
+Stream the answer as plain text:
+
+```powershell
+curl.exe -X POST http://127.0.0.1:8000/ask -H "Content-Type: application/json" -d "{\"question\":\"What does the contract say?\",\"stream\":true}"
+```
 
 ### Docker
 

@@ -1,0 +1,81 @@
+schema: '2.0'
+stages:
+  extract:
+    cmd: uv run python scripts/extract_rows.py
+    deps:
+    - path: data/raw/law.pdf
+      hash: md5
+      md5: 5086ef5f16f15d856278db943e58e948
+      size: 2599703
+    - path: scripts/extract_rows.py
+      hash: md5
+      md5: 911e2716b58c98392b502e3432aaf85a
+      size: 562
+    - path: src/egylaw_rag/corpus/extract.py
+      hash: md5
+      md5: fef0fc9eba524ebb9f421b666f91bb79
+      size: 1516
+    - path: src/egylaw_rag/corpus/store.py
+      hash: md5
+      md5: 41e80d0ac015f25dab9e7e3fdccf732a
+      size: 1115
+    outs:
+    - path: data/interim/raw_rows.json
+      hash: md5
+      md5: 78f96f50e3a79a83ac2a601615fa2362
+      size: 990263
+  parse:
+    cmd: uv run python scripts/parse_rows.py
+    deps:
+    - path: data/interim/raw_rows.json
+      hash: md5
+      md5: 78f96f50e3a79a83ac2a601615fa2362
+      size: 990263
+    - path: scripts/parse_rows.py
+      hash: md5
+      md5: b9e9ac18b83a50f95439c57387f46d43
+      size: 612
+    - path: src/egylaw_rag/corpus/arabic.py
+      hash: md5
+      md5: d892726544704c66814fc07ca4e8366b
+      size: 2670
+    - path: src/egylaw_rag/corpus/models.py
+      hash: md5
+      md5: 8de7f7fa3d399755e2dbd8e61e548797
+      size: 522
+    - path: src/egylaw_rag/corpus/parse.py
+      hash: md5
+      md5: 68e61ed7b2fd8ceb2272b2197ae2b4d0
+      size: 8075
+    - path: src/egylaw_rag/corpus/store.py
+      hash: md5
+      md5: 41e80d0ac015f25dab9e7e3fdccf732a
+      size: 1115
+    outs:
+    - path: data/processed/civil_code.json
+      hash: md5
+      md5: 6f62a1e719a68b5dbd29ac109426d260
+      size: 1950415
+  validate:
+    cmd: uv run python scripts/validate_corpus.py
+    deps:
+    - path: data/processed/civil_code.json
+      hash: md5
+      md5: 6f62a1e719a68b5dbd29ac109426d260
+      size: 1950415
+    - path: scripts/validate_corpus.py
+      hash: md5
+      md5: 05ba988a8bccee57d8c39cae23382ef0
+      size: 575
+    - path: src/egylaw_rag/corpus/models.py
+      hash: md5
+      md5: 8de7f7fa3d399755e2dbd8e61e548797
+      size: 522
+    - path: src/egylaw_rag/corpus/store.py
+      hash: md5
+      md5: 41e80d0ac015f25dab9e7e3fdccf732a
+      size: 1115
+    - path: src/egylaw_rag/corpus/validate.py
+      hash: md5
+      md5: 892224a94b55d40c7516b1fdcf0ea41f
+      size: 2658

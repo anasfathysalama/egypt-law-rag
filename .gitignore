@@ -29,13 +29,22 @@ env/
 .env.*
 !.env.example
 
-# Raw corpus cache (keep the directory marker)
+# Raw corpus cache (keep the directory marker and the DVC pointer)
 data/raw/*
 !data/raw/.gitkeep
+!data/raw/*.dvc
+!data/raw/.gitignore
 
-# Full parsed corpus is a DVC output; tests keep a small fixture
+# Cached PDF rows and the parsed corpus are DVC outputs
+data/interim/*
+!data/interim/.gitkeep
+!data/interim/*.dvc
+!data/interim/.gitignore
+
 data/processed/*
 !data/processed/.gitkeep
+!data/processed/*.dvc
+!data/processed/.gitignore
 
 # Experiment tracking and data versioning
 mlruns/

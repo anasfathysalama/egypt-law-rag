@@ -1,0 +1,29 @@
+stages:
+  extract:
+    cmd: uv run python scripts/extract_rows.py
+    deps:
+      - data/raw/law.pdf
+      - scripts/extract_rows.py
+      - src/egylaw_rag/corpus/extract.py
+      - src/egylaw_rag/corpus/store.py
+    outs:
+      - data/interim/raw_rows.json
+  parse:
+    cmd: uv run python scripts/parse_rows.py
+    deps:
+      - data/interim/raw_rows.json
+      - scripts/parse_rows.py
+      - src/egylaw_rag/corpus/arabic.py
+      - src/egylaw_rag/corpus/models.py
+      - src/egylaw_rag/corpus/parse.py
+      - src/egylaw_rag/corpus/store.py
+    outs:
+      - data/processed/civil_code.json
+  validate:
+    cmd: uv run python scripts/validate_corpus.py
+    deps:
+      - data/processed/civil_code.json
+      - scripts/validate_corpus.py
+      - src/egylaw_rag/corpus/models.py
+      - src/egylaw_rag/corpus/store.py
+      - src/egylaw_rag/corpus/validate.py

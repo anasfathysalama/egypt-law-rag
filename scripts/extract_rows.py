@@ -2,14 +2,12 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
+from egylaw_rag.config import get_settings
 from egylaw_rag.corpus.extract import extract_rows
 from egylaw_rag.corpus.store import write_rows
 
-ROOT = Path(__file__).resolve().parents[1]
-PDF_PATH = ROOT / "data" / "raw" / "law.pdf"
-ROWS_PATH = ROOT / "data" / "interim" / "raw_rows.json"
+PDF_PATH = get_settings().pdf
+ROWS_PATH = get_settings().raw_rows
 
 
 def main() -> None:

@@ -2,21 +2,20 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
+from egylaw_rag.config import get_settings
 from egylaw_rag.corpus.store import read_articles
 from egylaw_rag.index.chunk import chunk_articles
 from egylaw_rag.index.embed import LocalEmbedder
 from egylaw_rag.index.store import build_index
 
-ROOT = Path(__file__).resolve().parents[1]
-ARTICLES_PATH = ROOT / "data" / "processed" / "civil_code.json"
-INDEX_PATH = ROOT / "data" / "index"
+settings = get_settings()
+ARTICLES_PATH = settings.articles
+INDEX_PATH = settings.index
 
 
 def main() -> None:
     chunks = chunk_articles(read_articles(ARTICLES_PATH))
-    index = build_index(chunks, LocalEmbedder())
+    index = build_index(chunks, LocalEmbedder(settings.embedding_model))
     index.save(INDEX_PATH)
     print(f"wrote {len(chunks)} chunks to {INDEX_PATH}")
 

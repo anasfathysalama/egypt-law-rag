@@ -15,4 +15,6 @@ RUN uv sync --frozen --no-install-project --no-dev
 COPY src ./src
 RUN uv sync --frozen --no-dev
 
-CMD ["python", "-c", "import egylaw_rag; print(egylaw_rag.__name__)"]
+EXPOSE 8000
+
+CMD ["uvicorn", "egylaw_rag.api.app:app", "--host", "0.0.0.0", "--port", "8000"]

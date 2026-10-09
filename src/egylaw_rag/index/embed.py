@@ -6,8 +6,7 @@ from typing import Protocol
 
 import numpy as np
 
-# Small multilingual model that fastembed can run on CPU. Arabic and English share one space.
-EMBEDDING_MODEL = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+from egylaw_rag.config import get_settings
 
 
 class Embedder(Protocol):
@@ -19,8 +18,8 @@ class Embedder(Protocol):
 class LocalEmbedder:
     """CPU embedder. The model is downloaded on first use and then reused."""
 
-    def __init__(self, model_name: str = EMBEDDING_MODEL) -> None:
-        self.model_name = model_name
+    def __init__(self, model_name: str | None = None) -> None:
+        self.model_name = model_name or get_settings().embedding_model
         self._model: object | None = None
 
     def _embedding_model(self) -> object:

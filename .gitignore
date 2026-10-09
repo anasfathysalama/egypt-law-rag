@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Raw corpus cache (keep the directory marker)
+data/raw/*
+!data/raw/.gitkeep
+
+# Experiment tracking and data versioning
+mlruns/
+.dvc/cache/

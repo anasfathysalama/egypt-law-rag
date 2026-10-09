@@ -9,16 +9,16 @@ stages:
       size: 2599703
     - path: scripts/extract_rows.py
       hash: md5
-      md5: 911e2716b58c98392b502e3432aaf85a
-      size: 562
+      md5: 8a739f23af3244699ea5a6b6ae062704
+      size: 584
     - path: src/egylaw_rag/corpus/extract.py
       hash: md5
-      md5: fef0fc9eba524ebb9f421b666f91bb79
-      size: 1516
+      md5: 3cbd9e840408222c0d5fd41f90800dc9
+      size: 1565
     - path: src/egylaw_rag/corpus/store.py
       hash: md5
-      md5: 41e80d0ac015f25dab9e7e3fdccf732a
-      size: 1115
+      md5: 60b16e4eaebc21a62cfb16f75be11695
+      size: 1147
     outs:
     - path: data/interim/raw_rows.json
       hash: md5
@@ -33,24 +33,24 @@ stages:
       size: 990263
     - path: scripts/parse_rows.py
       hash: md5
-      md5: b9e9ac18b83a50f95439c57387f46d43
-      size: 612
+      md5: 31aaa79523ecf032bf33b565acb6b906
+      size: 634
     - path: src/egylaw_rag/corpus/arabic.py
       hash: md5
-      md5: d892726544704c66814fc07ca4e8366b
-      size: 2670
+      md5: d423cbc7d98e0d2a64043079ff0d2ed6
+      size: 2746
     - path: src/egylaw_rag/corpus/models.py
       hash: md5
-      md5: 8de7f7fa3d399755e2dbd8e61e548797
-      size: 522
+      md5: 0d892f69596868dcdb7e297b2c90f67d
+      size: 543
     - path: src/egylaw_rag/corpus/parse.py
       hash: md5
-      md5: 68e61ed7b2fd8ceb2272b2197ae2b4d0
-      size: 8075
+      md5: 289ce73c11ea7c924b56d929ecbf7800
+      size: 8335
     - path: src/egylaw_rag/corpus/store.py
       hash: md5
-      md5: 41e80d0ac015f25dab9e7e3fdccf732a
-      size: 1115
+      md5: 60b16e4eaebc21a62cfb16f75be11695
+      size: 1147
     outs:
     - path: data/processed/civil_code.json
       hash: md5
@@ -79,3 +79,32 @@ stages:
       hash: md5
       md5: 892224a94b55d40c7516b1fdcf0ea41f
       size: 2658
+  index:
+    cmd: uv run python scripts/build_index.py
+    deps:
+    - path: data/processed/civil_code.json
+      hash: md5
+      md5: 6f62a1e719a68b5dbd29ac109426d260
+      size: 1950415
+    - path: scripts/build_index.py
+      hash: md5
+      md5: c7c6ae5484389ff5eb80b9cac20526f6
+      size: 737
+    - path: src/egylaw_rag/index/chunk.py
+      hash: md5
+      md5: 75db5cea0d607c6992c77573e84d17bb
+      size: 2307
+    - path: src/egylaw_rag/index/embed.py
+      hash: md5
+      md5: b0cad8f440bef240a313305208a4ebfa
+      size: 1400
+    - path: src/egylaw_rag/index/store.py
+      hash: md5
+      md5: afbd52c989caaec8b2ba0641b1e11508
+      size: 2150
+    outs:
+    - path: data/index
+      hash: md5
+      md5: 75679fd61a4858a7763a3ed04718497a.dir
+      size: 2435019
+      nfiles: 2

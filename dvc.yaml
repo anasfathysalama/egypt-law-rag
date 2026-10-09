@@ -27,3 +27,13 @@ stages:
       - src/egylaw_rag/corpus/models.py
       - src/egylaw_rag/corpus/store.py
       - src/egylaw_rag/corpus/validate.py
+  index:
+    cmd: uv run python scripts/build_index.py
+    deps:
+      - data/processed/civil_code.json
+      - scripts/build_index.py
+      - src/egylaw_rag/index/chunk.py
+      - src/egylaw_rag/index/embed.py
+      - src/egylaw_rag/index/store.py
+    outs:
+      - data/index

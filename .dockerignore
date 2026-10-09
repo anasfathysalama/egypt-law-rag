@@ -6,6 +6,15 @@
 .mypy_cache
 __pycache__
 mlruns
-data
+.env
+.env.*
+data/*
+!data/processed
+!data/index
+data/processed/*
+!data/processed/civil_code.json
+data/index/*
+!data/index/chunks.json
+!data/index/vectors.npy
 reports
 *.mdc

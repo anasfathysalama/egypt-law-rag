@@ -45,12 +45,15 @@ data/processed/*
 !data/processed/.gitkeep
 !data/processed/*.dvc
 !data/processed/.gitignore
+!data/processed/civil_code.json
 
 # Vector index is a DVC output
 data/index/*
 !data/index/.gitkeep
 !data/index/*.dvc
 !data/index/.gitignore
+!data/index/chunks.json
+!data/index/vectors.npy
 
 # Experiment tracking and data versioning
 mlruns/

@@ -66,3 +66,76 @@ def chunk_articles(articles: list[ArticleRecord]) -> list[ArticleChunk]:
     for article in articles:
         chunks.extend(chunk_article(article))
     return chunks
+
+
+def chunk_windows(text: str, chunk_size: int, overlap: int) -> list[str]:
+    """Split text into windows. Each next window repeats `overlap` characters."""
+    if chunk_size <= 0:
+        raise ValueError("chunk_size must be positive")
+    if overlap < 0 or overlap >= chunk_size:
+        raise ValueError("overlap must be smaller than chunk_size")
+    cleaned = text.strip()
+    if len(cleaned) <= chunk_size:
+        return [cleaned] if cleaned else []
+    windows: list[str] = []
+    start = 0
+    while start < len(cleaned):
+        end = min(start + chunk_size, len(cleaned))
+        piece = cleaned[start:end].strip()
+        if piece:
+            windows.append(piece)
+        if end == len(cleaned):
+            break
+        start = end - overlap
+    return windows
+
+
+def chunk_article_config(
+    article: ArticleRecord,
+    chunk_size: int,
+    overlap: int,
+) -> list[ArticleChunk]:
+    """Window a live article. A repealed article stays one flagged chunk."""
+    text = (article.text_normalized or article.text_ar).strip()
+    if article.is_repealed:
+        return [
+            ArticleChunk(
+                chunk_id=str(article.article_number),
+                article_number=article.article_number,
+                citation=article.citation,
+                text=text,
+                is_repealed=True,
+            )
+        ]
+    parts = chunk_windows(text, chunk_size, overlap)
+    if len(parts) <= 1:
+        return [
+            ArticleChunk(
+                chunk_id=str(article.article_number),
+                article_number=article.article_number,
+                citation=article.citation,
+                text=text,
+                is_repealed=False,
+            )
+        ]
+    return [
+        ArticleChunk(
+            chunk_id=f"{article.article_number}-w{index}",
+            article_number=article.article_number,
+            citation=article.citation,
+            text=part,
+            is_repealed=False,
+        )
+        for index, part in enumerate(parts, start=1)
+    ]
+
+
+def chunk_articles_config(
+    articles: list[ArticleRecord],
+    chunk_size: int,
+    overlap: int,
+) -> list[ArticleChunk]:
+    chunks: list[ArticleChunk] = []
+    for article in articles:
+        chunks.extend(chunk_article_config(article, chunk_size, overlap))
+    return chunks

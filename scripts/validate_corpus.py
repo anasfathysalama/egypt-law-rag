@@ -2,13 +2,11 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
+from egylaw_rag.config import get_settings
 from egylaw_rag.corpus.store import read_articles
 from egylaw_rag.corpus.validate import validate_articles
 
-ROOT = Path(__file__).resolve().parents[1]
-ARTICLES_PATH = ROOT / "data" / "processed" / "civil_code.json"
+ARTICLES_PATH = get_settings().articles
 
 
 def main() -> None:

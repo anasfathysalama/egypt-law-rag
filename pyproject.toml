@@ -1,7 +1,7 @@
 [project]
 name = "egylaw-rag"
 version = "0.1.0"
-description = "Add your description here"
+description = "A RAG implementation for egypt law"
 readme = "README.md"
 authors = [
     { name = "anasfathysalama", email = "salamaanas681@gmail.com" }
@@ -9,10 +9,15 @@ authors = [
 requires-python = ">=3.11"
 dependencies = [
     "dvc>=3.67.1",
+    "fastapi>=0.143.0",
     "fastembed>=0.9.0",
+    "httpx>=0.28.1",
+    "mlflow>=3.17.0",
     "numpy>=2.4.6",
     "pdfplumber>=0.11.10",
     "pydantic>=2.14.0",
+    "pydantic-settings>=2.15.0",
+    "uvicorn[standard]>=0.54.0",
 ]
 
 [build-system]
@@ -25,6 +30,9 @@ dev = [
     "pytest>=9.1.1",
     "ruff>=0.16.10",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
 
 [tool.ruff]
 line-length = 100

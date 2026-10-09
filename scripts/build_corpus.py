@@ -7,15 +7,15 @@ written for tests.
 from __future__ import annotations
 
 import json
-from pathlib import Path
 
+from egylaw_rag.config import get_settings
 from egylaw_rag.corpus.build import build_corpus
 from egylaw_rag.corpus.validate import validate_articles
 
-ROOT = Path(__file__).resolve().parents[1]
-PDF_PATH = ROOT / "data" / "raw" / "law.pdf"
-OUTPUT_PATH = ROOT / "data" / "processed" / "civil_code.json"
-FIXTURE_PATH = ROOT / "tests" / "fixtures" / "articles_sample.json"
+_settings = get_settings()
+PDF_PATH = _settings.pdf
+OUTPUT_PATH = _settings.articles
+FIXTURE_PATH = _settings.fixture
 SAMPLE_NUMBERS = (
     1,
     10,

@@ -1,11 +1,10 @@
-from pathlib import Path
-
 import pytest
 
+from egylaw_rag.config import get_settings
 from egylaw_rag.corpus.build import build_corpus
 from egylaw_rag.corpus.validate import EXPECTED_COUNT, validate_articles
 
-PDF_PATH = Path("data/raw/law.pdf")
+PDF_PATH = get_settings().pdf
 
 
 @pytest.fixture(scope="module")

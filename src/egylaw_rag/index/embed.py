@@ -16,6 +16,12 @@ class Embedder(Protocol):
     def embed_query(self, text: str) -> np.ndarray: ...
 
 
+# fastembed has no multilingual-e5-small or bge-m3. These two fit a 16 GB CPU.
+PRIMARY_EMBEDDING_MODEL = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+SECOND_EMBEDDING_MODEL = "minishlab/potion-multilingual-128M"
+EMBEDDING_MODELS = (PRIMARY_EMBEDDING_MODEL, SECOND_EMBEDDING_MODEL)
+
+
 class LocalEmbedder:
     """CPU embedder. The model is downloaded on first use and then reused."""
 

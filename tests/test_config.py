@@ -8,7 +8,11 @@ def test_default_paths_stay_inside_the_project(monkeypatch) -> None:
     monkeypatch.delenv("PDF_PATH", raising=False)
     monkeypatch.delenv("ARTICLES_PATH", raising=False)
     monkeypatch.delenv("INDEX_DIR", raising=False)
+    monkeypatch.delenv("EMBEDDING_MODEL", raising=False)
+    monkeypatch.delenv("EMBEDDING_MODEL_ALT", raising=False)
     monkeypatch.delenv("EMBEDDING_CACHE", raising=False)
+    monkeypatch.delenv("QUESTIONS_CI_PATH", raising=False)
+    monkeypatch.delenv("QUESTIONS_FULL_PATH", raising=False)
     monkeypatch.delenv("MLFLOW_TRACKING_URI", raising=False)
     monkeypatch.delenv("MLFLOW_EXPERIMENT", raising=False)
     settings = Settings(_env_file=None)
@@ -19,6 +23,11 @@ def test_default_paths_stay_inside_the_project(monkeypatch) -> None:
     assert settings.gemini_api_key == ""
     assert settings.groq_api_key == ""
     assert settings.groq_model == "qwen3.8-27b"
+    assert settings.embedding_model == "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+    assert settings.embedding_model_alt == "minishlab/potion-multilingual-128M"
+    root = settings.project_root
+    assert settings.questions_ci == root / "data" / "eval" / "questions_ci.json"
+    assert settings.questions_full == root / "data" / "eval" / "questions_full.json"
     assert settings.embedding_cache_dir == settings.project_root / ".cache" / "fastembed"
     assert settings.mlflow_tracking_uri == "http://127.0.0.1:5000"
     assert settings.mlflow_experiment == "civil-code-retrieval"

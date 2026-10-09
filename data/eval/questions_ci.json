@@ -1,0 +1,122 @@
+[
+  {
+    "id": "q01",
+    "question_ar": "هل تسرى النصوص التشريعية على جميع المسائل التي تتناولها هذه النصوص في لفظها أو في فحواها؟",
+    "question_en": "Do provisions of laws govern all matters to which they apply in letter or spirit?",
+    "article_number": 1
+  },
+  {
+    "id": "q02",
+    "question_ar": "هل القانون المصري هو المرجع في تكييف العلاقات عندما تتنازع القوانين؟",
+    "question_en": "Does Egyptian law determine the nature of a relationship when laws conflict?",
+    "article_number": 10
+  },
+  {
+    "id": "q03",
+    "question_ar": "هل ألغيت المواد من ٥٤ إلى ٨٠ بالقرار الجمهوري بالقانون رقم ٣٤٨ لسنة ١٩٥٦؟",
+    "question_en": "Were articles 54 to 80 repealed by Presidential Decree No. 348 of 1956?",
+    "article_number": 54
+  },
+  {
+    "id": "q04",
+    "question_ar": "ما أثر القرار الجمهوري رقم ٣٢ لسنة ١٩٦٤ على المواد من ٥٤ إلى ٨٠؟",
+    "question_en": "What did Presidential Decree No. 32 of 1964 do to articles 54 to 80?",
+    "article_number": 80
+  },
+  {
+    "id": "q05",
+    "question_ar": "هل كل شيء غير خارج عن التعامل بطبيعته أو بحكم القانون يصح أن يكون محلا للحقوق المالية؟",
+    "question_en": "May a thing that is not outside the ambit of trade be the object of proprietary rights?",
+    "article_number": 81
+  },
+  {
+    "id": "q06",
+    "question_ar": "هل العقد شريعة المتعاقدين ولا يجوز نقضه أو تعديله إلا باتفاق الطرفين أو لأسباب يقررها القانون؟",
+    "question_en": "Does the contract make the law of the parties, changeable only by consent or by law?",
+    "article_number": 147
+  },
+  {
+    "id": "q07",
+    "question_ar": "من يقدر وجود الالتزام الطبيعي عند عدم وجود نص في القانون؟",
+    "question_en": "Who decides whether a natural obligation exists when the law has no provision?",
+    "article_number": 200
+  },
+  {
+    "id": "q08",
+    "question_ar": "هل يجوز النزول عن التقادم قبل ثبوت الحق فيه أو الاتفاق على مدة تختلف عن مدة القانون؟",
+    "question_en": "Can a debtor renounce prescription before the right arises, or agree a different period?",
+    "article_number": 388
+  },
+  {
+    "id": "q09",
+    "question_ar": "هل المواد من ٣٨٩ إلى ٤١٧ ملغاة؟",
+    "question_en": "Are articles 389 to 417 repealed?",
+    "article_number": 389
+  },
+  {
+    "id": "q10",
+    "question_ar": "ماذا بقي نافذا من المواد من ٣٨٩ إلى ٤١٧ في إثبات الالتزامات؟",
+    "question_en": "What remains in force of articles 389 to 417 on proof of obligations?",
+    "article_number": 417
+  },
+  {
+    "id": "q11",
+    "question_ar": "هل البيع عقد يلتزم به البائع أن ينقل للمشتري ملكية شيء في مقابل ثمن نقدي؟",
+    "question_en": "Is sale a contract whereby the vendor transfers ownership for a price in money?",
+    "article_number": 418
+  },
+  {
+    "id": "q12",
+    "question_ar": "متى تسقط بالتقادم دعوى الضمان إذا انقضت سنة من وقت تسليم المبيع؟",
+    "question_en": "When is a warranty action prescribed, one year from delivery of the thing sold?",
+    "article_number": 452
+  },
+  {
+    "id": "q13",
+    "question_ar": "هل يجوز للواهب أن يرجع في الهبة إذا قبل الموهوب له ذلك؟",
+    "question_en": "May a donor revoke a gift when the donee consents?",
+    "article_number": 500
+  },
+  {
+    "id": "q14",
+    "question_ar": "متى يقع باطلا شرط في وثيقة التأمين يقضي بسقوط الحق بسبب مخالفة القوانين؟",
+    "question_en": "When is an insurance condition void if it forfeits cover for a breach of the law?",
+    "article_number": 750
+  },
+  {
+    "id": "q15",
+    "question_ar": "هل يسلم المصفي إلى الورثة ما آل إليهم من أموال التركة؟",
+    "question_en": "Must an administrator deliver to the heirs the estate property that devolves on them?",
+    "article_number": 900
+  },
+  {
+    "id": "q16",
+    "question_ar": "متى يتخلص مالك العقار المرتفق به من تكليف القيام بأعمال الارتفاق على نفقته؟",
+    "question_en": "When may the owner of the servient tenement abandon it to escape the cost of the servitude?",
+    "article_number": 1022
+  },
+  {
+    "id": "q17",
+    "question_ar": "هل ينقضي الرهن إذا رجع المرهون إلى حيازة الراهن؟",
+    "question_en": "Is a pledge extinguished when the pledged thing returns to the pledgor?",
+    "article_number": 1100
+  },
+  {
+    "id": "q18",
+    "question_ar": "هل لثمن العقار المستحق للبائع امتياز على العقار المبيع يجب قيده؟",
+    "question_en": "Does the price due to a vendor of an immovable have a privilege that must be inscribed?",
+    "article_number": 1147
+  },
+  {
+    "id": "q19",
+    "question_ar": "هل للمقاولين والمهندسين المعماريين امتياز على المنشآت بقدر زيادة قيمة العقار؟",
+    "question_en": "Do contractors and architects have a privilege limited to the increase in value of the works?",
+    "article_number": 1148
+  },
+  {
+    "id": "q20",
+    "question_ar": "هل للشركاء الذين اقتسموا عقارا حق امتياز تأمينا لحق الرجوع فيما بينهم؟",
+    "question_en": "Do co-owners who partitioned an immovable have a privilege securing their remedies?",
+    "article_number": 1149
+  }
+]

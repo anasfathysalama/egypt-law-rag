@@ -7,7 +7,8 @@ from pathlib import Path
 
 import numpy as np
 
-from egylaw_rag.index.chunk import ArticleChunk
+from egylaw_rag.corpus.models import ArticleRecord
+from egylaw_rag.index.chunk import ArticleChunk, chunk_articles
 from egylaw_rag.index.embed import Embedder
 
 
@@ -53,6 +54,11 @@ def search_text(
     k: int = 5,
 ) -> list[ArticleChunk]:
     return index.search(embedder.embed_query(query), k)
+
+
+def rebuild_index(articles: list[ArticleRecord], embedder: Embedder) -> VectorIndex:
+    """Embed every article again, including one that was just added."""
+    return build_index(chunk_articles(articles), embedder)
 
 
 def _normalize(vectors: np.ndarray) -> np.ndarray:

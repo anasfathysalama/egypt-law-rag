@@ -13,6 +13,7 @@ from egylaw_rag.index.store import VectorIndex
 
 CHUNKING_EXPERIMENT = "chunking-comparison"
 REGISTRY_NAME = "best-chunking-config"
+TEXT_FIELD = "text_normalized"
 _TOKEN = re.compile(r"[\w\u0600-\u06FF]{3,}", re.UNICODE)
 
 QUERIES = (
@@ -77,6 +78,7 @@ def log_chunk_run(
     overlap: int,
     embedding_model: str,
     faithfulness: float,
+    text_field: str = TEXT_FIELD,
 ) -> str:
     import mlflow
 
@@ -86,6 +88,7 @@ def log_chunk_run(
         mlflow.log_param("chunk_size", chunk_size)
         mlflow.log_param("overlap", overlap)
         mlflow.log_param("embedding_model", embedding_model)
+        mlflow.log_param("text_field", text_field)
         mlflow.log_metric("faithfulness", faithfulness)
         return run.info.run_id
 

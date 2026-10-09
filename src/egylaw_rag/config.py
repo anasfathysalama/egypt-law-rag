@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     index_dir: Path = Path("data/index")
     fixture_path: Path = Path("tests/fixtures/articles_sample.json")
     embedding_model: str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+    embedding_model_alt: str = "minishlab/potion-multilingual-128M"
+    questions_ci_path: Path = Path("data/eval/questions_ci.json")
+    questions_full_path: Path = Path("data/eval/questions_full.json")
     groq_api_key: str = ""
     groq_model: str = "qwen3.8-27b"
     groq_api_base: str = "https://api.groq.com/openai/v1"
@@ -68,6 +71,14 @@ class Settings(BaseSettings):
     @property
     def embedding_cache_dir(self) -> Path:
         return self.resolve(self.embedding_cache)
+
+    @property
+    def questions_ci(self) -> Path:
+        return self.resolve(self.questions_ci_path)
+
+    @property
+    def questions_full(self) -> Path:
+        return self.resolve(self.questions_full_path)
 
 
 @lru_cache(maxsize=1)

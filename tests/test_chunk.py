@@ -16,6 +16,21 @@ def _article(**overrides: object) -> ArticleRecord:
     return ArticleRecord.model_validate(values)
 
 
+def test_chunk_keeps_the_headings() -> None:
+    chunks = chunk_article(
+        _article(
+            part="FIRST PART",
+            book="BOOK I",
+            chapter="CHAPTER I",
+            section="Section I Contracts",
+        )
+    )
+    assert chunks[0].part == "FIRST PART"
+    assert chunks[0].book == "BOOK I"
+    assert chunks[0].chapter == "CHAPTER I"
+    assert chunks[0].section == "Section I Contracts"
+
+
 def test_short_article_is_one_chunk() -> None:
     chunks = chunk_article(_article())
     assert len(chunks) == 1

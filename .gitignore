@@ -33,6 +33,10 @@ env/
 data/raw/*
 !data/raw/.gitkeep
 
+# Full parsed corpus is a DVC output; tests keep a small fixture
+data/processed/*
+!data/processed/.gitkeep
+
 # Experiment tracking and data versioning
 mlruns/
 .dvc/cache/

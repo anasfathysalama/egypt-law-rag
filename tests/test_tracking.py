@@ -29,6 +29,7 @@ def test_chunk_run_logs_size_overlap_model_and_faithfulness(tmp_path) -> None:
     assert row["params.chunk_size"] == "400"
     assert row["params.overlap"] == "50"
     assert row["params.embedding_model"] == "test-model"
+    assert row["params.text_field"] == "text_normalized"
     assert row["metrics.faithfulness"] == 0.8
 
 

@@ -55,6 +55,12 @@ jobs:
           ARTICLES_PATH: ${{ steps.corpus.outputs.path }}
           EMBEDDING_CACHE: .cache/fastembed
         run: uv run python scripts/build_index.py
+      - name: Fail when faithfulness is under 0.75
+        env:
+          ARTICLES_PATH: ${{ steps.corpus.outputs.path }}
+          INDEX_DIR: data/index
+          EMBEDDING_CACHE: .cache/fastembed
+        run: uv run python scripts/check_faithfulness.py
       - uses: actions/upload-artifact@v4
         with:
           name: vector-index

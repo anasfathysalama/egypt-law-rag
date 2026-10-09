@@ -9,6 +9,7 @@ from egylaw_rag.index.embed import LocalEmbedder
 from egylaw_rag.index.store import build_index
 from egylaw_rag.tracking import (
     CHUNKING_EXPERIMENT,
+    TEXT_FIELD,
     faithfulness_score,
     log_chunk_run,
     register_best_chunking,
@@ -68,6 +69,7 @@ def main() -> None:
             overlap,
             settings.embedding_model,
             score,
+            TEXT_FIELD,
         )
         results.append((chunk_size, overlap, score, run_id))
         print(f"chunk_size={chunk_size} overlap={overlap} faithfulness={score:.3f}")

@@ -20,7 +20,32 @@ class ArticleChunk(BaseModel):
     citation: str
     text: str
     is_repealed: bool
+    part: str | None = None
+    book: str | None = None
+    chapter: str | None = None
+    section: str | None = None
     paragraph: int | None = None
+
+
+def _chunk(
+    article: ArticleRecord,
+    *,
+    chunk_id: str,
+    text: str,
+    paragraph: int | None = None,
+) -> ArticleChunk:
+    return ArticleChunk(
+        chunk_id=chunk_id,
+        article_number=article.article_number,
+        citation=article.citation,
+        text=text,
+        is_repealed=article.is_repealed,
+        part=article.part,
+        book=article.book,
+        chapter=article.chapter,
+        section=article.section,
+        paragraph=paragraph,
+    )
 
 
 def _numbered_paragraphs(text: str) -> list[str]:
@@ -39,22 +64,12 @@ def chunk_article(article: ArticleRecord) -> list[ArticleChunk]:
     text = (article.text_normalized or article.text_ar).strip()
     paragraphs = [] if article.is_repealed else _numbered_paragraphs(text)
     if article.is_repealed or len(text) < MIN_CHARS_TO_SPLIT or not paragraphs:
-        return [
-            ArticleChunk(
-                chunk_id=str(article.article_number),
-                article_number=article.article_number,
-                citation=article.citation,
-                text=text,
-                is_repealed=article.is_repealed,
-            )
-        ]
+        return [_chunk(article, chunk_id=str(article.article_number), text=text)]
     return [
-        ArticleChunk(
+        _chunk(
+            article,
             chunk_id=f"{article.article_number}-p{index}",
-            article_number=article.article_number,
-            citation=article.citation,
             text=paragraph,
-            is_repealed=False,
             paragraph=index,
         )
         for index, paragraph in enumerate(paragraphs, start=1)
@@ -98,34 +113,12 @@ def chunk_article_config(
     """Window a live article. A repealed article stays one flagged chunk."""
     text = (article.text_normalized or article.text_ar).strip()
     if article.is_repealed:
-        return [
-            ArticleChunk(
-                chunk_id=str(article.article_number),
-                article_number=article.article_number,
-                citation=article.citation,
-                text=text,
-                is_repealed=True,
-            )
-        ]
+        return [_chunk(article, chunk_id=str(article.article_number), text=text)]
     parts = chunk_windows(text, chunk_size, overlap)
     if len(parts) <= 1:
-        return [
-            ArticleChunk(
-                chunk_id=str(article.article_number),
-                article_number=article.article_number,
-                citation=article.citation,
-                text=text,
-                is_repealed=False,
-            )
-        ]
+        return [_chunk(article, chunk_id=str(article.article_number), text=text)]
     return [
-        ArticleChunk(
-            chunk_id=f"{article.article_number}-w{index}",
-            article_number=article.article_number,
-            citation=article.citation,
-            text=part,
-            is_repealed=False,
-        )
+        _chunk(article, chunk_id=f"{article.article_number}-w{index}", text=part)
         for index, part in enumerate(parts, start=1)
     ]
 

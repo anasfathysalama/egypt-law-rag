@@ -96,9 +96,7 @@ uv run python scripts/serve.py
 Ask a question:
 
 ```powershell
-Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/ask `
-  -ContentType "application/json" `
-  -Body '{"question":"What does the contract say?"}'
+curl.exe -X POST http://127.0.0.1:8000/ask -H "Content-Type: application/json" -d "{\"question\":\"What does the contract say?\"}"
 ```
 
 Health check:

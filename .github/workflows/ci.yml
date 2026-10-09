@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  lint-and-test:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,9 +15,21 @@ jobs:
           enable-cache: true
       - run: uv sync --frozen --group dev
       - run: uv run ruff check .
+
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.11"
+          enable-cache: true
+      - run: uv sync --frozen --group dev
       - run: uv run pytest -q
 
-  ruff:
+  rebuild-index:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,13 +37,31 @@ jobs:
         with:
           python-version: "3.11"
           enable-cache: true
-      - run: uv sync --frozen --group dev
-      - run: uv run ruff check .
+      - uses: actions/cache@v4
+        with:
+          path: .cache/fastembed
+          key: fastembed-${{ hashFiles('uv.lock') }}
+      - run: uv sync --frozen
+      - name: Choose the corpus
+        id: corpus
+        run: |
+          if [ -f data/processed/civil_code.json ]; then
+            echo "path=data/processed/civil_code.json" >> "$GITHUB_OUTPUT"
+          else
+            echo "path=tests/fixtures/articles_sample.json" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Rebuild the vector index
+        env:
+          ARTICLES_PATH: ${{ steps.corpus.outputs.path }}
+          EMBEDDING_CACHE: .cache/fastembed
+        run: uv run python scripts/build_index.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vector-index
+          path: data/index
 
   docker:
-    needs:
-      - lint-and-test
-      - ruff
+    needs: rebuild-index
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

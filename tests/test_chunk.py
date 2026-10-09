@@ -1,5 +1,5 @@
 from egylaw_rag.corpus.models import ArticleRecord
-from egylaw_rag.index.chunk import chunk_article
+from egylaw_rag.index.chunk import chunk_article, chunk_article_config, chunk_windows
 
 
 def _article(**overrides: object) -> ArticleRecord:
@@ -48,3 +48,19 @@ def test_long_article_splits_by_numbered_paragraph() -> None:
     assert {chunk.citation for chunk in chunks} == {"Egyptian Civil Code, Article 147"}
     assert {chunk.article_number for chunk in chunks} == {147}
     assert chunks[0].chunk_id == "147-p1"
+
+
+def test_windows_repeat_the_overlap() -> None:
+    windows = chunk_windows("abcdefghijklmnopqrstuvwxyz", chunk_size=10, overlap=3)
+    assert windows[0] == "abcdefghij"
+    assert windows[1].startswith("hij")
+
+
+def test_repealed_article_is_not_windowed() -> None:
+    chunks = chunk_article_config(
+        _article(text_normalized="ملغاة " * 80, is_repealed=True),
+        chunk_size=20,
+        overlap=5,
+    )
+    assert len(chunks) == 1
+    assert chunks[0].is_repealed is True

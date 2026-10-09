@@ -54,4 +54,7 @@ data/index/*
 
 # Experiment tracking and data versioning
 mlruns/
+reports/mlflow/*
+!reports/mlflow/.gitkeep
+.cache/
 .dvc/cache/

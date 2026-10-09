@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from typing import Protocol
 
 import numpy as np
@@ -26,6 +27,9 @@ class LocalEmbedder:
         if self._model is None:
             from fastembed import TextEmbedding
 
+            cache = get_settings().embedding_cache_dir
+            cache.mkdir(parents=True, exist_ok=True)
+            os.environ["FASTEMBED_CACHE_PATH"] = str(cache)
             self._model = TextEmbedding(self.model_name)
         return self._model
 

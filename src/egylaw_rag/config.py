@@ -33,6 +33,9 @@ class Settings(BaseSettings):
     groq_max_tokens: int = 512
     api_host: str = "127.0.0.1"
     api_port: int = 8000
+    embedding_cache: Path = Path(".cache/fastembed")
+    mlflow_tracking_uri: str = "http://127.0.0.1:5000"
+    mlflow_experiment: str = "civil-code-retrieval"
     gemini_api_key: str = ""
     gemini_model: str = "gemini-3.8-flash"
     gemini_api_base: str = "https://generativelanguage.googleapis.com/v1beta"
@@ -61,6 +64,10 @@ class Settings(BaseSettings):
     @property
     def fixture(self) -> Path:
         return self.resolve(self.fixture_path)
+
+    @property
+    def embedding_cache_dir(self) -> Path:
+        return self.resolve(self.embedding_cache)
 
 
 @lru_cache(maxsize=1)

@@ -8,7 +8,7 @@ from pathlib import Path
 from pydantic import BaseModel, Field
 
 FAITHFULNESS_MINIMUM = 0.75
-RETRIEVAL_K = 8
+RETRIEVAL_K = 16
 
 
 class EvalQuestion(BaseModel):

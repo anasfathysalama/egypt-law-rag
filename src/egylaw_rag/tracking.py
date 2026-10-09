@@ -5,8 +5,6 @@ from __future__ import annotations
 import re
 import time
 
-import mlflow.pyfunc
-
 from egylaw_rag.api.retrieve import retrieve
 from egylaw_rag.index.embed import Embedder
 from egylaw_rag.index.store import VectorIndex
@@ -62,6 +60,29 @@ def log_retrieval_run(
         mlflow.log_metric("documents_indexed", documents_indexed)
 
 
+def log_ragas_run(
+    tracking_uri: str,
+    experiment: str,
+    faithfulness: float,
+    answer_relevancy: float,
+    context_precision: float,
+    context_recall: float,
+    question_count: int,
+) -> str:
+    import mlflow
+
+    mlflow.set_tracking_uri(tracking_uri)
+    mlflow.set_experiment(experiment)
+    with mlflow.start_run() as run:
+        mlflow.log_param("judge", "ragas")
+        mlflow.log_param("question_count", question_count)
+        mlflow.log_metric("faithfulness", faithfulness)
+        mlflow.log_metric("answer_relevancy", answer_relevancy)
+        mlflow.log_metric("context_precision", context_precision)
+        mlflow.log_metric("context_recall", context_recall)
+        return run.info.run_id
+
+
 def faithfulness_score(gold: str, contexts: list[str]) -> float:
     """Share of gold-answer words that appear in the retrieved chunks."""
     gold_tokens = set(_TOKEN.findall(gold.lower()))
@@ -93,35 +114,6 @@ def log_chunk_run(
         return run.info.run_id
 
 
-class ChunkConfigModel(mlflow.pyfunc.PythonModel):
-    """Winning chunk settings. Registered as an MLflow pyfunc model."""
-
-    def __init__(
-        self,
-        chunk_size: int,
-        overlap: int,
-        embedding_model: str,
-        faithfulness: float,
-    ) -> None:
-        self.chunk_size = chunk_size
-        self.overlap = overlap
-        self.embedding_model = embedding_model
-        self.faithfulness = faithfulness
-
-    def predict(
-        self,
-        context: object,
-        model_input: object,
-        params: object = None,
-    ) -> dict[str, object]:
-        return {
-            "chunk_size": self.chunk_size,
-            "overlap": self.overlap,
-            "embedding_model": self.embedding_model,
-            "faithfulness": self.faithfulness,
-        }
-
-
 def register_best_chunking(
     tracking_uri: str,
     run_id: str,
@@ -131,14 +123,37 @@ def register_best_chunking(
     faithfulness: float,
 ) -> str:
     import mlflow
+    import mlflow.pyfunc
+
+    class ChunkConfigModel(mlflow.pyfunc.PythonModel):
+        """Winning chunk settings. Registered as an MLflow pyfunc model."""
+
+        def __init__(self) -> None:
+            self.chunk_size = chunk_size
+            self.overlap = overlap
+            self.embedding_model = embedding_model
+            self.faithfulness = faithfulness
+
+        def predict(
+            self,
+            context: object,
+            model_input: object,
+            params: object = None,
+        ) -> dict[str, object]:
+            return {
+                "chunk_size": self.chunk_size,
+                "overlap": self.overlap,
+                "embedding_model": self.embedding_model,
+                "faithfulness": self.faithfulness,
+            }
 
     mlflow.set_tracking_uri(tracking_uri)
-    model = ChunkConfigModel(chunk_size, overlap, embedding_model, faithfulness)
     with mlflow.start_run(run_id=run_id):
         info = mlflow.pyfunc.log_model(
             name="chunking-config",
-            python_model=model,
+            python_model=ChunkConfigModel(),
             registered_model_name=REGISTRY_NAME,
             pip_requirements=["mlflow"],
         )
-    return info.registered_model_version.name if info.registered_model_version else REGISTRY_NAME
+    version = info.registered_model_version
+    return version if isinstance(version, str) else REGISTRY_NAME

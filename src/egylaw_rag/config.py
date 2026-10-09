@@ -42,6 +42,16 @@ class Settings(BaseSettings):
     gemini_api_key: str = ""
     gemini_model: str = "gemini-3.8-flash"
     gemini_api_base: str = "https://generativelanguage.googleapis.com/v1beta"
+    generator_backend: str = "groq"
+    ollama_api_base: str = "http://127.0.0.1:11434/v1"
+    ollama_model: str = "qwen2.5:0.5b"
+    alert_webhook_url: str = ""
+    # USD per 1,000 tokens. Grafana multiplies the hourly token rate by this price.
+    # Stand-in for a Groq Qwen chat price, not a live invoice.
+    token_price_per_1k: float = 0.05
+    langfuse_host: str = ""
+    langfuse_public_key: str = ""
+    langfuse_secret_key: str = ""
 
     def resolve(self, path: Path) -> Path:
         if path.is_absolute():

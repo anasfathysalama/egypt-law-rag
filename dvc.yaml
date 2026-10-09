@@ -18,7 +18,8 @@ stages:
       - src/egylaw_rag/corpus/parse.py
       - src/egylaw_rag/corpus/store.py
     outs:
-      - data/processed/civil_code.json
+      - data/processed/civil_code.json:
+          cache: false
   validate:
     cmd: uv run python scripts/validate_corpus.py
     deps:
@@ -36,4 +37,5 @@ stages:
       - src/egylaw_rag/index/embed.py
       - src/egylaw_rag/index/store.py
     outs:
-      - data/index
+      - data/index:
+          cache: false

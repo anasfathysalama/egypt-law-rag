@@ -1,0 +1,4 @@
+services:
+  egylaw-rag:
+    build: .
+    image: egylaw-rag:local
